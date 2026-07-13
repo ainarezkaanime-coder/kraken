@@ -544,6 +544,7 @@
 
   let currentRotation = 0;
   let countdownTimer = null;
+  let spinTimer = null;
 
   function formatRemaining(ms){
     const total = Math.max(0, Math.ceil(ms/1000));
@@ -620,6 +621,8 @@
     }
   }
 
+  const SPIN_MS = 5000; // единственный источник длительности — использовать только эту константу
+
   function spin(){
     if(spinBtn.classList.contains('disabled') || spinBtn.classList.contains('spinning')) return;
 
@@ -633,13 +636,26 @@
     spinBtn.classList.add('spinning');
     resultBanner.classList.remove('show');
 
+    // задаём точную длительность прямо перед стартом, с !important —
+    // это гарантирует ровно 5 секунд, даже если у пользователя включено
+    // "уменьшение анимации" (prefers-reduced-motion), которое иначе обнулило бы transition
+    wheelEl.style.setProperty('transition', `transform ${SPIN_MS}ms cubic-bezier(.11,.74,.09,1)`, 'important');
+
     audio.currentTime = 0;
     audio.play().catch(()=>{});
 
-    wheelEl.style.transform = `rotate(${currentRotation}deg)`;
+    // запускаем поворот на следующем кадре, чтобы transition успел примениться
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        wheelEl.style.transform = `rotate(${currentRotation}deg)`;
+      });
+    });
 
-    const onEnd = () => {
-      wheelEl.removeEventListener('transitionend', onEnd);
+    // логика результата и остановка звука привязаны к таймеру, а не к событию
+    // transitionend — так время гарантированно ровно SPIN_MS и не зависит
+    // от особенностей браузера при очень коротких/переопределённых transition
+    clearTimeout(spinTimer);
+    spinTimer = setTimeout(()=>{
       audio.pause();
       audio.currentTime = 0;
       spinBtn.classList.remove('spinning');
@@ -655,8 +671,7 @@
       const now = Date.now();
       setLastSpin(now);
       lockButton();
-    };
-    wheelEl.addEventListener('transitionend', onEnd);
+    }, SPIN_MS);
   }
 
   spinBtn.addEventListener('click', spin);
