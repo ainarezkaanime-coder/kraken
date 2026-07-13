@@ -89,10 +89,14 @@
   .icon-btn:hover{background:#000000;border-color:#d8d8d8;}
   @media (max-width:768px){
     nav{min-height:120px;padding:16px 18px;}
-    nav .logo-mark{height:90px;}
+    nav .logo-mark{height:74px;}
+    nav .nav-right{gap:8px;}
+    .icon-btn{width:38px;height:38px;}
   }
 
   @media (max-width:480px){
+    nav{flex-wrap:wrap;row-gap:10px;min-height:0;}
+    nav .logo-mark{height:56px;}
     .pill-btn span.label{display:none;}
     .pill-btn{padding:11px;}
   }
@@ -206,6 +210,15 @@
 .cta-btn.ghost::before{display:none;}
 .cta-btn.ghost:hover{background:#222;color:#fff;border-color:#000;}
 
+  .cta-btn.outline{
+    background:#fff;
+    color:#000;
+    border:2px solid #000;
+  }
+  .cta-btn.outline::before{display:none;}
+  .cta-btn.outline:hover{background:#f2f2f2;}
+  .cta-btn.outline .wheel-ic{flex-shrink:0;}
+
   .cta-btn .arrow{transition:transform .3s ease;}
   .cta-btn:hover .arrow{transform:translateX(3px);}
 
@@ -261,6 +274,52 @@
   .cta-row{padding-top:28px;border-top:1px solid #e8e8e8;}
   nav{box-shadow:0 8px 30px rgba(0,0,0,.04);}
 
+  /* ---------- roulette teaser (homepage) ---------- */
+  .roulette-teaser{
+    position:relative;
+    z-index:2;
+    padding:0 clamp(20px,5vw,64px) 70px;
+  }
+  .roulette-card{
+    display:block;
+    max-width:640px;
+    border:1px solid #eaeaea;
+    border-radius:22px;
+    padding:34px clamp(20px,4vw,40px) 0;
+    overflow:hidden;
+    transition:border-color .25s ease, transform .25s ease;
+  }
+  .roulette-card:hover{border-color:#ccc;transform:translateY(-2px);}
+  .roulette-card h2{
+    font-weight:700;
+    font-size:clamp(26px,4vw,36px);
+    letter-spacing:-.01em;
+  }
+  .roulette-card p{
+    color:#666;
+    font-size:14.5px;
+    margin-top:6px;
+  }
+  .teaser-wheel-crop{
+    height:170px;
+    overflow:hidden;
+    margin-top:20px;
+    position:relative;
+    display:flex;
+    justify-content:center;
+  }
+  .teaser-wheel-crop svg{
+    width:340px;
+    flex-shrink:0;
+    transform:translateY(4%);
+  }
+  .teaser-wheel-crop::after{
+    content:'';
+    position:absolute;
+    left:0;right:0;bottom:0;height:60px;
+    background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.94));
+  }
+
 </style>
 </head>
 <body>
@@ -291,6 +350,16 @@
           <path d="M21 15l-5-5L5 21"></path>
         </svg>
       </a>
+      <a class="icon-btn" href="roulette.html" aria-label="Рулетка" title="Рулетка">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"></circle>
+          <line x1="12" y1="3" x2="12" y2="5.5"></line>
+          <line x1="12" y1="18.5" x2="12" y2="21"></line>
+          <line x1="3" y1="12" x2="5.5" y2="12"></line>
+          <line x1="18.5" y1="12" x2="21" y2="12"></line>
+        </svg>
+      </a>
     </div>
   </nav>
 
@@ -317,9 +386,30 @@
         <a class="cta-btn primary" data-cta="assortment" href="#" target="_blank" rel="noopener">Ассортимент <span class="arrow">→</span></a>
         <a class="cta-btn ghost" data-cta="manager" href="#" target="_blank" rel="noopener">Менеджер <span class="arrow">→</span></a>
         <a class="cta-btn ghost" href="gallery.html">Галерея <span class="arrow">→</span></a>
+        <a class="cta-btn outline" href="roulette.html">
+          <svg class="wheel-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"></circle>
+            <line x1="12" y1="3" x2="12" y2="5.5"></line>
+            <line x1="12" y1="18.5" x2="12" y2="21"></line>
+            <line x1="3" y1="12" x2="5.5" y2="12"></line>
+            <line x1="18.5" y1="12" x2="21" y2="12"></line>
+          </svg>
+          Рулетка <span class="arrow">→</span>
+        </a>
       </div>
     </div>
   </header>
+
+  <section class="roulette-teaser">
+    <a href="roulette.html" class="roulette-card">
+      <h2>РУЛЕТКА</h2>
+      <p>Испытай удачу и получи крутые призы</p>
+      <div class="teaser-wheel-crop">
+        <svg id="teaserWheel" viewBox="0 0 400 400"></svg>
+      </div>
+    </a>
+  </section>
 
   
 
@@ -328,12 +418,58 @@
      КОНФИГ ССЫЛОК — меняйте только этот блок
      ====================================================== */
   const CONFIG = {
-    assortmentUrl: "https://telegra.ph/Assortiment-krknlat-07-13", // ссылка кнопки "Ассортимент"
-    managerUrl:    "https://t.me/krkn_oper?text=%D1%85%D0%BE%D1%87%D1%83%20%D0%BF%D1%80%D0%B8%D0%BE%D0%B1%D1%80%D0%B5%D1%81%D1%82%D0%B8%20%D1%82%D0%BE%D0%B2%D0%B0%D1%80%0A%0A%D0%BC%D0%BE%D0%B9%20%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%3A%0A%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%3A%0A%D1%82%D0%BE%D0%B2%D0%B0%D1%80%2C%20%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%8B%D0%B9%20%D0%BC%D0%BD%D0%B5%20%D0%BD%D1%83%D0%B6%D0%B5%D0%BD%3A"        // ссылка кнопки "Менеджер"
+    assortmentUrl: "https://teletype.in/@bless-yo-trap/T_jMiz2CQbh", // ссылка кнопки "Ассортимент"
+    managerUrl:    "https://t.me/krkn_oper"        // ссылка кнопки "Менеджер"
   };
   document.querySelectorAll('[data-cta="assortment"]').forEach(el => el.href = CONFIG.assortmentUrl);
   document.querySelectorAll('[data-cta="manager"]').forEach(el => el.href = CONFIG.managerUrl);
   /* ====================================================== */
+
+  /* ---------- static roulette preview on homepage ---------- */
+  (function drawTeaserWheel(){
+    const PRIZES = [
+      { label:"СКИДКА 20%", icon:"%" },
+      { label:"СКИДКА 15%", icon:"%" },
+      { label:"БОНУС", icon:"🎁" },
+      { label:"ПОПРОБУЙ ЕЩЁ", icon:"↻" },
+      { label:"СКИДКА 10%", icon:"%" },
+      { label:"FREE", icon:"📦" },
+    ];
+    const SLICE = 360/PRIZES.length;
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.getElementById('teaserWheel');
+    if(!svg) return;
+    const CX=200, CY=200, R=190;
+    function polar(cx,cy,r,a){ const rad=(a-90)*Math.PI/180; return [cx+r*Math.cos(rad), cy+r*Math.sin(rad)]; }
+    PRIZES.forEach((p,i)=>{
+      const startA=i*SLICE, endA=(i+1)*SLICE;
+      const [x1,y1]=polar(CX,CY,R,startA), [x2,y2]=polar(CX,CY,R,endA);
+      const path=document.createElementNS(svgNS,'path');
+      path.setAttribute('d', `M${CX},${CY} L${x1},${y1} A${R},${R} 0 0 1 ${x2},${y2} Z`);
+      path.setAttribute('fill', i%2===0 ? '#141414' : '#0a0a0a');
+      path.setAttribute('stroke', '#ffffff');
+      path.setAttribute('stroke-width', '2.5');
+      svg.appendChild(path);
+
+      const midA=startA+SLICE/2;
+      const [tx,ty]=polar(CX,CY,R*0.62,midA);
+      const g=document.createElementNS(svgNS,'g');
+      g.setAttribute('transform', `translate(${tx},${ty}) rotate(${midA})`);
+      const icon=document.createElementNS(svgNS,'text');
+      icon.setAttribute('text-anchor','middle'); icon.setAttribute('y','-8'); icon.setAttribute('font-size','20');
+      icon.textContent=p.icon; g.appendChild(icon);
+      const label=document.createElementNS(svgNS,'text');
+      label.setAttribute('text-anchor','middle'); label.setAttribute('y','15');
+      label.setAttribute('font-family',"'Space Grotesk', sans-serif");
+      label.setAttribute('font-weight','700'); label.setAttribute('font-size','13'); label.setAttribute('fill','#fff');
+      label.textContent=p.label; g.appendChild(label);
+      svg.appendChild(g);
+    });
+    const ring=document.createElementNS(svgNS,'circle');
+    ring.setAttribute('cx',CX); ring.setAttribute('cy',CY); ring.setAttribute('r',R-1.5);
+    ring.setAttribute('fill','none'); ring.setAttribute('stroke','#0a0a0a'); ring.setAttribute('stroke-width','5');
+    svg.appendChild(ring);
+  })();
 
   // cursor glow within hero
   const hero = document.getElementById('hero');
